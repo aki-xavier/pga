@@ -4,15 +4,15 @@
 use crate::primitives::point;
 use std::fmt;
 
-pub const num_components: usize = 16;
-pub const num_grades: usize = 5;
+pub const NUM_COMPONENTS: usize = 16;
+pub const NUM_GRADES: usize = 5;
 
 /// Metric of the four generators in bit order (e1, e2, e3, e0).
-pub const generator_metric: [f64; 4] = [1.0, 1.0, 1.0, 0.0];
+pub const GENERATOR_METRIC: [f64; 4] = [1.0, 1.0, 1.0, 0.0];
 
 #[derive(Clone, Copy, Debug, Default, PartialEq)]
 pub struct Multivector {
-    pub values: [f64; num_components],
+    pub values: [f64; NUM_COMPONENTS],
 }
 
 // --- constructors ------------------------------------------------------------
@@ -116,7 +116,7 @@ impl Multivector {
     /// grade returns the grade-g projection.
     pub fn grade(&self, g: usize) -> Multivector {
         let mut res = Multivector::default();
-        for i in 0..num_components {
+        for i in 0..NUM_COMPONENTS {
             if popcount(i as u32) as usize == g {
                 res.values[i] = self.values[i];
             }
@@ -183,7 +183,7 @@ impl Multivector {
 
     pub fn add(&self, o: Multivector) -> Multivector {
         let mut res = Multivector::default();
-        for i in 0..num_components {
+        for i in 0..NUM_COMPONENTS {
             res.values[i] = self.values[i] + o.values[i];
         }
         res
@@ -191,15 +191,15 @@ impl Multivector {
 
     pub fn sub(&self, o: Multivector) -> Multivector {
         let mut res = Multivector::default();
-        for i in 0..num_components {
+        for i in 0..NUM_COMPONENTS {
             res.values[i] = self.values[i] - o.values[i];
         }
         res
     }
 
-    pub fn mul_scalar(&self, s: f64) -> Multivector {
+    pub fn scale(&self, s: f64) -> Multivector {
         let mut res = Multivector::default();
-        for i in 0..num_components {
+        for i in 0..NUM_COMPONENTS {
             res.values[i] = self.values[i] * s;
         }
         res
@@ -207,7 +207,7 @@ impl Multivector {
 
     pub fn div_scalar(&self, s: f64) -> Multivector {
         let mut res = Multivector::default();
-        for i in 0..num_components {
+        for i in 0..NUM_COMPONENTS {
             res.values[i] = self.values[i] / s;
         }
         res
@@ -215,7 +215,7 @@ impl Multivector {
 
     pub fn neg(&self) -> Multivector {
         let mut res = Multivector::default();
-        for i in 0..num_components {
+        for i in 0..NUM_COMPONENTS {
             res.values[i] = -self.values[i];
         }
         res
@@ -226,7 +226,7 @@ impl Multivector {
     /// V calls this `eq`; the name is taken by the language's own comparison
     /// trait here, and `PartialEq` is the exact comparison.
     pub fn approx_eq(&self, o: Multivector) -> bool {
-        for i in 0..num_components {
+        for i in 0..NUM_COMPONENTS {
             if (self.values[i] - o.values[i]).abs() > 1e-6 {
                 return false;
             }
@@ -243,8 +243,8 @@ impl Multivector {
     /// str renders non-zero components by grade.
     pub fn str(&self) -> String {
         let mut parts: Vec<String> = Vec::new();
-        for g in 0..num_grades {
-            for i in 0..num_components {
+        for g in 0..NUM_GRADES {
+            for i in 0..NUM_COMPONENTS {
                 if popcount(i as u32) as usize != g {
                     continue;
                 }
@@ -273,12 +273,12 @@ impl Multivector {
     /// makes the term vanish because e0^2 = 0.
     pub fn gp(&self, o: Multivector) -> Multivector {
         let mut res = Multivector::default();
-        for ma in 0..num_components {
+        for ma in 0..NUM_COMPONENTS {
             let a = self.values[ma];
             if a == 0.0 {
                 continue;
             }
-            for mb in 0..num_components {
+            for mb in 0..NUM_COMPONENTS {
                 let b = o.values[mb];
                 if b == 0.0 {
                     continue;
@@ -297,12 +297,12 @@ impl Multivector {
     /// sharing a basis factor, else +/- the union blade.
     pub fn op(&self, o: Multivector) -> Multivector {
         let mut res = Multivector::default();
-        for ma in 0..num_components {
+        for ma in 0..NUM_COMPONENTS {
             let a = self.values[ma];
             if a == 0.0 {
                 continue;
             }
-            for mb in 0..num_components {
+            for mb in 0..NUM_COMPONENTS {
                 let b = o.values[mb];
                 if b == 0.0 {
                     continue;
@@ -322,12 +322,12 @@ impl Multivector {
     /// A|B = sum_{r,s>=1} < <A>_r <B>_s >_|r-s| ; scalar (grade-0) terms are zero.
     pub fn ip(&self, o: Multivector) -> Multivector {
         let mut res = Multivector::default();
-        for ga in 1..num_grades {
+        for ga in 1..NUM_GRADES {
             let a_g = self.grade(ga);
             if a_g.is_zero() {
                 continue;
             }
-            for gb in 1..num_grades {
+            for gb in 1..NUM_GRADES {
                 let b_g = o.grade(gb);
                 if b_g.is_zero() {
                     continue;
@@ -342,12 +342,12 @@ impl Multivector {
     /// lc is the left contraction A _| B: sums of <_A_g _B_h>_(h-g) for g <= h.
     pub fn lc(&self, o: Multivector) -> Multivector {
         let mut res = Multivector::default();
-        for ga in 1..num_grades {
+        for ga in 1..NUM_GRADES {
             let a_g = self.grade(ga);
             if a_g.is_zero() {
                 continue;
             }
-            for gb in ga..num_grades {
+            for gb in ga..NUM_GRADES {
                 let b_g = o.grade(gb);
                 if b_g.is_zero() {
                     continue;
@@ -361,7 +361,7 @@ impl Multivector {
     /// rc is the right contraction A |_ B: sums of <_A_g _B_h>_(g-h) for g >= h.
     pub fn rc(&self, o: Multivector) -> Multivector {
         let mut res = Multivector::default();
-        for ga in 1..num_grades {
+        for ga in 1..NUM_GRADES {
             let a_g = self.grade(ga);
             if a_g.is_zero() {
                 continue;
@@ -380,7 +380,7 @@ impl Multivector {
     /// reverse applies the reversal involution: grade-k blade * (-1)^(k(k-1)/2).
     pub fn reverse(&self) -> Multivector {
         let mut res = Multivector::default();
-        for i in 0..num_components {
+        for i in 0..NUM_COMPONENTS {
             // signed on purpose: V's int arithmetic gives k(k-1)/2 = 0 for the
             // scalar component, where an unsigned k - 1 would underflow
             let k = popcount(i as u32) as i32;
@@ -396,8 +396,8 @@ impl Multivector {
     /// grade_involution flips the sign of odd-grade components.
     pub fn grade_involution(&self) -> Multivector {
         let mut res = Multivector::default();
-        for i in 0..num_components {
-            if popcount(i as u32) % 2 != 0 {
+        for i in 0..NUM_COMPONENTS {
+            if !popcount(i as u32).is_multiple_of(2) {
                 res.values[i] = -self.values[i];
             } else {
                 res.values[i] = self.values[i];
@@ -418,9 +418,9 @@ impl Multivector {
     /// dual(dual(x)) = (-1)^grade(x) . x.
     pub fn dual(&self) -> Multivector {
         let mut res = Multivector::default();
-        for i in 0..num_components {
+        for i in 0..NUM_COMPONENTS {
             if self.values[i] != 0.0 {
-                res.values[dual_dst[i]] += dual_sign[i] * self.values[i];
+                res.values[DUAL_DST[i]] += DUAL_SIGN[i] * self.values[i];
             }
         }
         res
@@ -429,14 +429,14 @@ impl Multivector {
     /// undual returns (-1)^grade(x) . dual(x), the inverse of dual.
     pub fn undual(&self) -> Multivector {
         let mut res = Multivector::default();
-        for i in 0..num_components {
+        for i in 0..NUM_COMPONENTS {
             if self.values[i] != 0.0 {
-                let sgn = dual_sign[i];
-                if popcount(dual_dst[i] as u32) % 2 != 0 {
+                let sgn = DUAL_SIGN[i];
+                if !popcount(DUAL_DST[i] as u32).is_multiple_of(2) {
                     // (-1)^grade of the result: odd grades flip
-                    res.values[dual_dst[i]] += -sgn * self.values[i];
+                    res.values[DUAL_DST[i]] += -sgn * self.values[i];
                 } else {
-                    res.values[dual_dst[i]] += sgn * self.values[i];
+                    res.values[DUAL_DST[i]] += sgn * self.values[i];
                 }
             }
         }
@@ -486,8 +486,8 @@ impl Multivector {
         // (s + p I)^-1 = (s - p I) / s^2 since I^2 = 0
         let inv = self
             .reverse()
-            .mul_scalar(s)
-            .sub(self.reverse().gp(pseudoscalar()).mul_scalar(p));
+            .scale(s)
+            .sub(self.reverse().gp(pseudoscalar()).scale(p));
         inv.div_scalar(s * s)
     }
 
@@ -516,18 +516,18 @@ impl Multivector {
         let s = b2.values[0];
         if s.abs() < 1e-12 {
             // nilpotent: B^2 = 0 (pure translation / ideal line)
-            return mv_scalar(scale).add(b.mul_scalar(scale));
+            return mv_scalar(scale).add(b.scale(scale));
         }
         let p = b2.values[15];
         let u = (-s).sqrt();
         let v = -p / (2.0 * u);
         let perp = b.gp(pseudoscalar()).div_scalar(u); // theta_hat _| = B.I / u
-        let hat = b.sub(perp.mul_scalar(v)).div_scalar(u);
+        let hat = b.sub(perp.scale(v)).div_scalar(u);
         let cu = scale * u.cos();
         let su = scale * u.sin();
         mv_scalar(cu)
-            .add(hat.mul_scalar(su))
-            .gp(mv_scalar(1.0).add(perp.mul_scalar(v)))
+            .add(hat.scale(su))
+            .gp(mv_scalar(1.0).add(perp.scale(v)))
     }
 
     /// log returns the bivector B with exp(B) = self for a unit motor.  Pure
@@ -550,8 +550,8 @@ impl Multivector {
         let v = -c / sin_u;
         let perp = b.gp(pseudoscalar()).div_scalar(sin_u); // sin_u . theta_hat _| = B.I
         let beta = v * u.cos();
-        let hat = b.sub(perp.mul_scalar(beta)).div_scalar(sin_u);
-        hat.mul_scalar(u).add(perp.mul_scalar(v))
+        let hat = b.sub(perp.scale(beta)).div_scalar(sin_u);
+        hat.scale(u).add(perp.scale(v))
     }
 
     /// to_matrix returns the equivalent 4x4 homogeneous transform [R|t], flattened
@@ -589,7 +589,7 @@ impl Multivector {
     #[allow(dead_code)]
     fn blade_grade(&self) -> i32 {
         let mut g: i32 = -1;
-        for i in 0..num_components {
+        for i in 0..NUM_COMPONENTS {
             if self.values[i] != 0.0 {
                 let gi = popcount(i as u32) as i32;
                 if g != -1 && gi != g {
@@ -622,13 +622,13 @@ pub fn gp_blade(ma: u32, mb: u32) -> (usize, f64) {
     // common basis factors square to their metric; the null generator e0
     // squares to 0, so any shared e0 factor annihilates the term.
     let mut coeff = 1.0;
-    for i in 0..4 {
+    for (i, m) in GENERATOR_METRIC.iter().enumerate() {
         if (ma & mb) & (1 << i) != 0 {
-            coeff *= generator_metric[i];
+            coeff *= m;
         }
     }
     let mut sign = 1.0;
-    if swaps % 2 != 0 {
+    if !swaps.is_multiple_of(2) {
         sign = -1.0;
     }
     ((ma ^ mb) as usize, sign * coeff)
@@ -646,14 +646,14 @@ pub fn rotor(axis: [f64; 3], angle: f64) -> Multivector {
     // unit line through the origin: u _| I3
     let line = u.lc(e123());
     let half = angle / 2.0;
-    mv_scalar(half.cos()).sub(line.mul_scalar(half.sin()))
+    mv_scalar(half.cos()).sub(line.scale(half.sin()))
 }
 
 /// translator returns the translator T = exp(-d/2 . e0 ^ t) = 1 - (e0 ^ t)/2
 /// (the ideal line e0 ^ t is nilpotent, so the series truncates).
 pub fn translator(displacement: [f64; 3]) -> Multivector {
     let t = mv_vector(displacement[0], displacement[1], displacement[2], 0.0);
-    mv_scalar(1.0).sub(e0().op(t).mul_scalar(0.5))
+    mv_scalar(1.0).sub(e0().op(t).scale(0.5))
 }
 
 /// motor builds the rigid motion M = T . R (rotate then translate).
@@ -669,7 +669,7 @@ pub fn motor_identity() -> Multivector {
 /// interpolate slerps between motors m1 and m2: M(t) = m1 . exp(t . log(m1~ . m2)).
 pub fn interpolate(m1: Multivector, m2: Multivector, t: f64) -> Multivector {
     let rel = m1.reverse().gp(m2);
-    m1.gp(rel.log().mul_scalar(t).exp())
+    m1.gp(rel.log().scale(t).exp())
 }
 
 /// blade_name returns the symbol of a basis blade, sorted by generator
@@ -700,7 +700,7 @@ fn blade_name(i: usize) -> &'static str {
 /// PGA4CS Table 4 / bivector.net: 1<->I, e0<->e123, e1<->e032, e2<->e013,
 /// e3<->e021, e01<->e23, e02<->e31, e03<->e12, e032->-e1, e013->-e2,
 /// e021->-e3, e123->-e0.
-const dual_dst: [usize; 16] = [
+const DUAL_DST: [usize; 16] = [
     15, // 1    -> I
     14, // e1   -> e032 (= e23e0 slot)
     13, // e2   -> e013 (= e13e0 slot)
@@ -719,6 +719,6 @@ const dual_dst: [usize; 16] = [
     0,  // I    -> 1
 ];
 
-const dual_sign: [f64; 16] = [
+const DUAL_SIGN: [f64; 16] = [
     1.0, 1.0, 1.0, 1.0, 1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, 1.0, -1.0, -1.0, 1.0,
 ];

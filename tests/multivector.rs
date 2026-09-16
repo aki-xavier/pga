@@ -51,7 +51,7 @@ fn ref_blade_gp(ma: u32, mb: u32) -> (usize, f64) {
     let mut mask = 0u32;
     for g in gens {
         if mask & (1 << g) != 0 {
-            coeff *= generator_metric[g as usize];
+            coeff *= GENERATOR_METRIC[g as usize];
             mask &= !(1 << g);
         } else {
             mask |= 1 << g;
@@ -151,7 +151,7 @@ fn dual() {
     for i in 0..16 {
         let x = blade(i);
         let dd = x.dual().dual();
-        if popcount(i as u32) % 2 == 0 {
+        if popcount(i as u32).is_multiple_of(2) {
             assert!(mv_almost(dd, x), "dual^2 for blade {i}");
         } else {
             assert!(mv_almost(dd, x.neg()), "dual^2 for blade {i}");

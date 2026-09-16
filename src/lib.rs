@@ -36,15 +36,11 @@
 // Table 4 / bivector.net, converted to this basis order), and
 // dual(dual(x)) = (-1)^grade(x) . x.
 //
-// PORT NOTE: identifiers keep the V module's spelling (`num_components`,
-// `dual_dst`, `mv_scalar`, …) rather than Rust's casing conventions, so this
-// crate can be diffed against the original line by line; the allow is for that
-// and nothing else. Three items that V keeps module-private are public here
-// because the ported tests use them from outside the crate: `popcount`,
-// `gp_blade` and `generator_metric`. V's approximate `eq` is `approx_eq`, since
-// `eq` is the name of a std trait method.
-
-#![allow(non_upper_case_globals)]
+// PORT NOTE: the module keeps the V module's vocabulary (`mv_scalar`, `gp_blade`, ...),
+// with the constant names upper case as Rust requires. Three items that V keeps
+// module-private are public here because the ported tests use them from outside the
+// crate: `popcount`, `gp_blade` and `GENERATOR_METRIC`. V's approximate `eq` is
+// `approx_eq`, since `eq` is the name of a std trait method.
 
 pub mod multivector;
 pub mod primitives;

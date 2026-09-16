@@ -15,9 +15,9 @@ use crate::multivector::{e0, e1, e123, e2, e3, mv_vector, Multivector};
 /// point returns the PGA point at (x, y, z).
 pub fn point(x: f64, y: f64, z: f64) -> Multivector {
     let mut p = e123();
-    p = p.add(e0().op(e3()).op(e2()).mul_scalar(x));
-    p = p.add(e0().op(e1()).op(e3()).mul_scalar(y));
-    p = p.add(e0().op(e2()).op(e1()).mul_scalar(z));
+    p = p.add(e0().op(e3()).op(e2()).scale(x));
+    p = p.add(e0().op(e1()).op(e3()).scale(y));
+    p = p.add(e0().op(e2()).op(e1()).scale(z));
     p
 }
 
@@ -175,13 +175,7 @@ pub fn line_angle(a: Multivector, b: Multivector) -> f64 {
     if na < 1e-12 || nb < 1e-12 {
         return 0.0;
     }
-    let mut dot = (da[0] * db[0] + da[1] * db[1] + da[2] * db[2]) / (na * nb);
-    if dot < -1.0 {
-        dot = -1.0;
-    }
-    if dot > 1.0 {
-        dot = 1.0;
-    }
+    let dot = ((da[0] * db[0] + da[1] * db[1] + da[2] * db[2]) / (na * nb)).clamp(-1.0, 1.0);
     dot.abs().acos()
 }
 
