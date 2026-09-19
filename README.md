@@ -1,8 +1,8 @@
 # pga — Projective Geometric Algebra Cl(3,0,1)
 
-A project of its own: `simu` (its consumer) depends on it as a sibling path
-dependency, so nothing of this algebra lives in `simu`'s tree and this crate can
-be built, tested and released alone. MIT-licensed (see `LICENSE`).
+A project of its own: `../z1-arm` and `../g1-biped` (its consumers) depend on it as
+sibling path dependencies, so nothing of this algebra lives in either tree and this
+crate can be built, tested and released alone. MIT-licensed (see `LICENSE`).
 
 P(R*_{3,0,1}) = Cl(3,0,1) — the plane-based (dual) PGA: the algebra of Euclidean
 3D point/line/plane geometry, with a degenerate fourth generator `e0`
