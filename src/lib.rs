@@ -1,9 +1,8 @@
 // pga — Projective Geometric Algebra Cl(3,0,1): 16-component multivectors,
 // blades and motors for 3D Euclidean geometry (plane-based / dual PGA).
 //
-// Consumed by the two products (`../z1-arm`, `../g1-biped`) as a sibling path
-// dependency.  Its test suite (tests/multivector.rs) cross-checks the whole 16x16
-// product table against an independent reference implementation.
+// Its test suite (tests/multivector.rs) cross-checks the whole 16x16 product
+// table against an independent reference implementation.
 //
 // P(R*_{3,0,1}) = Cl(3,0,1) — the "plane-based" (dual) PGA: the algebra of
 // Euclidean 3D point/line/plane geometry.
