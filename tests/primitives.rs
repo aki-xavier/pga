@@ -1,6 +1,5 @@
-// primitives.rs — geometry-layer tests, ported from primitives_test.v:
-// coordinates, distances, angles, projections and the PGA join/meet
-// constructions on real primitive data.
+// primitives.rs — geometry-layer tests: coordinates, distances, angles,
+// projections and the PGA join/meet constructions on real primitive data.
 
 use pga::*;
 

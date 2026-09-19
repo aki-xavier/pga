@@ -1,5 +1,5 @@
 // multivector.rs — the 16-component multivector, its operators, the Hodge dual,
-// and the motor group (dual quaternions of SE(3)). Port of multivector.v.
+// and the motor group (dual quaternions of SE(3)).
 
 use crate::primitives::point;
 use std::fmt;
@@ -99,9 +99,6 @@ pub fn e0() -> Multivector {
 // --- component access --------------------------------------------------------
 
 /// popcount counts the set bits of a small non-negative integer.
-///
-/// Public only because the ported test suite (which V keeps inside the module)
-/// uses it.
 pub fn popcount(x: u32) -> u32 {
     let mut n = 0;
     let mut v = x;
@@ -222,9 +219,6 @@ impl Multivector {
     }
 
     /// approx_eq performs approximate equality (allclose, atol=1e-6).
-    ///
-    /// V calls this `eq`; the name is taken by the language's own comparison
-    /// trait here, and `PartialEq` is the exact comparison.
     pub fn approx_eq(&self, o: Multivector) -> bool {
         for i in 0..NUM_COMPONENTS {
             if (self.values[i] - o.values[i]).abs() > 1e-6 {
@@ -234,8 +228,7 @@ impl Multivector {
         true
     }
 
-    /// copy returns a fresh multivector with the same components. (Rust values
-    /// are copied by assignment; this exists for the port's call sites.)
+    /// copy returns a fresh multivector with the same components.
     pub fn copy(&self) -> Multivector {
         *self
     }
@@ -381,8 +374,6 @@ impl Multivector {
     pub fn reverse(&self) -> Multivector {
         let mut res = Multivector::default();
         for i in 0..NUM_COMPONENTS {
-            // signed on purpose: V's int arithmetic gives k(k-1)/2 = 0 for the
-            // scalar component, where an unsigned k - 1 would underflow
             let k = popcount(i as u32) as i32;
             if (k * (k - 1) / 2) % 2 != 0 {
                 res.values[i] = -self.values[i];
@@ -584,8 +575,6 @@ impl Multivector {
 
     /// blade_grade returns the grade of a pure blade, or -1 when the multivector
     /// holds mixed grades or is zero.
-    ///
-    /// V keeps this helper module-private and unused; it is kept here for parity.
     #[allow(dead_code)]
     fn blade_grade(&self) -> i32 {
         let mut g: i32 = -1;
@@ -609,9 +598,6 @@ impl fmt::Display for Multivector {
 }
 
 /// gp_blade returns the product of two basis blades as (result mask, coeff).
-///
-/// Public only because the ported test suite (which V keeps inside the module)
-/// cross-checks it against its own reference implementation.
 pub fn gp_blade(ma: u32, mb: u32) -> (usize, f64) {
     let mut swaps = 0u32;
     for i in 0..4 {

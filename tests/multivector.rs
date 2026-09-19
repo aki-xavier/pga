@@ -1,5 +1,4 @@
-// multivector.rs — tests for the PGA Cl(3,0,1) core, ported from
-// multivector_test.v with its own tolerances.
+// multivector.rs — tests for the PGA Cl(3,0,1) core.
 //
 // The geometric product is cross-checked against an independent reference
 // (ref_blade_gp) that folds blades back into generators and bubble-sorts them

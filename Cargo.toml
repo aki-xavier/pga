@@ -1,6 +1,6 @@
 [package]
 name = "pga"
-description = "Projective Geometric Algebra Cl(3,0,1): 16-component multivectors, blades and motors for 3D Euclidean geometry (Rust port of the pga V module)."
+description = "Projective Geometric Algebra Cl(3,0,1): 16-component multivectors, blades and motors for 3D Euclidean geometry."
 version = "0.1.0"
 edition = "2021"
 license = "MIT"

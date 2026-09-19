@@ -1,5 +1,5 @@
 // primitives.rs — the geometry layer for PGA: points, planes, lines and the
-// distance / angle / projection toolbox. Port of primitives.v.
+// distance / angle / projection toolbox.
 //
 //   plane:  n + d e0            (unit normal n, signed distance d)
 //   line:   bivector direction + moment (join of two points; Euclidean lines
