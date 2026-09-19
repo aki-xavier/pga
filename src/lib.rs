@@ -2,7 +2,7 @@
 // blades and motors for 3D Euclidean geometry (plane-based / dual PGA).
 //
 // Rust port of the `pga` V module (MIT, same author), vendored into this
-// repository so the ported simu crate depends on nothing outside it. The
+// project of its own, consumed by the simu crate as a sibling path dependency. The
 // algebra, the basis layout, the dual signs and the motion conventions are the
 // original's, and its test suite is ported here as the oracle
 // (tests/multivector.rs cross-checks the whole 16x16 product table against an

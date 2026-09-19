@@ -1,7 +1,8 @@
 # pga — Projective Geometric Algebra Cl(3,0,1)
 
-Rust port of the `pga` V module, vendored into this repository so `simu` depends
-on nothing outside it. The original is MIT-licensed (see `LICENSE`, carried over
+Rust port of the `pga` V module, and a project of its own: `simu` (its consumer)
+depends on it as a sibling path dependency, so nothing of this algebra lives in
+`simu`'s tree and this crate can be built, tested and released alone. The original is MIT-licensed (see `LICENSE`, carried over
 unchanged); the algebra, the basis layout, the dual signs and the motion
 conventions are its author's, and its test suite is ported here as the oracle.
 
