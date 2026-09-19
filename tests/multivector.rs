@@ -1,10 +1,8 @@
-// multivector.rs — tests for the PGA Cl(3,0,1) core.
-//
 // The geometric product is cross-checked against an independent reference
-// (ref_blade_gp) that folds blades back into generators and bubble-sorts them
-// with the generator metric [1, 1, 1, 0] (e0 squares to 0) — so a wrong sign or
-// a wrong slot in the 16x16 table is caught against a different derivation
-// rather than against itself.
+// (ref_blade_gp) that folds blades back into generators and bubble-sorts them with
+// the generator metric [1, 1, 1, 0] (e0 squares to 0) — so a wrong sign or a wrong
+// slot in the 16x16 table is caught against a different derivation rather than
+// against itself.
 
 use pga::*;
 
@@ -21,9 +19,8 @@ fn mv_almost(a: Multivector, b: Multivector) -> bool {
     true
 }
 
-/// ref_blade_gp is the independent reference basis-blade product: both blades
-/// expand into generator index lists, bubble-sorted (each inversion flips the
-/// sign), then each duplicated generator folds into its metric coefficient.
+/// Both blades expand into generator index lists, are bubble-sorted (each inversion
+/// flips the sign), and each duplicated generator folds into its metric coefficient.
 fn ref_blade_gp(ma: u32, mb: u32) -> (usize, f64) {
     let mut gens: Vec<u32> = Vec::new();
     for i in 0..4 {
@@ -194,7 +191,6 @@ fn rotor_translator_motor() {
     let rx = rotor([1.0, 0.0, 0.0], std::f64::consts::PI / 2.0);
     let got2 = rx.apply(point(0.0, 0.0, 1.0)).coords();
     assert!(got2[0].abs() < 1e-6 && (got2[1] + 1.0).abs() < 1e-6);
-    // translation
     let tt = translator([1.0, 0.0, 0.0])
         .apply(point(2.0, 1.0, 0.0))
         .coords();
@@ -209,13 +205,10 @@ fn rotor_translator_motor() {
 
 #[test]
 fn exp_log_roundtrip() {
-    // general screw bivector
     let b = mv_bivector(0.5, -0.2, 0.3, 0.1, 0.4, -0.2);
     assert!(mv_almost(b.exp().log(), b), "screw bivector");
-    // pure rotation
     let br = mv_bivector(0.3, 0.0, 0.0, 0.0, 0.0, 0.0);
     assert!(mv_almost(br.exp().log(), br), "pure rotation");
-    // pure translation (nilpotent)
     let bt = mv_bivector(0.0, 0.0, 0.0, 0.4, -0.2, 0.3);
     assert!(mv_almost(bt.exp().log(), bt), "pure translation");
     // exp of a translator's generator equals the translator itself

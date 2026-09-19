@@ -1,7 +1,6 @@
 # pga — Projective Geometric Algebra Cl(3,0,1)
 
-A standalone crate: it can be built, tested and released on its own. MIT-licensed
-(see `LICENSE`).
+MIT-licensed (see `LICENSE`).
 
 P(R*_{3,0,1}) = Cl(3,0,1) — the plane-based (dual) PGA: the algebra of Euclidean
 3D point/line/plane geometry, with a degenerate fourth generator `e0`
@@ -15,7 +14,7 @@ meet  = outer product, join = regressive product
 motor = even-grade versor, M X M~ applies it
 ```
 
-The full derivation (basis bitmask indexing, the XOR/sign product, the Hodge
+The derivation (basis bitmask indexing, the XOR/sign product, the Hodge
 complement table, the screw bivector `exp`/`log` closed forms) is in the module
 docs of `src/lib.rs` and `src/multivector.rs`.
 

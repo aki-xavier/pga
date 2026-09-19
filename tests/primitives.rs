@@ -1,6 +1,3 @@
-// primitives.rs — geometry-layer tests: coordinates, distances, angles,
-// projections and the PGA join/meet constructions on real primitive data.
-
 use pga::*;
 
 fn close(a: f64, b: f64, tol: f64) -> bool {
@@ -26,13 +23,11 @@ fn point_plane_incidence() {
 
 #[test]
 fn distances() {
-    // 3-4-5 point distance
     assert!(close(
         point_dist(point(0.0, 0.0, 0.0), point(3.0, 4.0, 0.0)),
         5.0,
         1e-9
     ));
-    // point-line: (1,0,3) to the z-axis
     let lz = line_from_points(point(0.0, 0.0, 0.0), point(0.0, 0.0, 1.0));
     assert!(close(point_line_dist(point(1.0, 0.0, 3.0), lz), 1.0, 1e-9));
     assert!(close(
@@ -40,7 +35,6 @@ fn distances() {
         8.0f64.sqrt(),
         1e-9
     ));
-    // line-line: skew lines
     let l1 = line_from_points(point(1.0, 2.0, 0.0), point(1.0, 2.0, 1.0));
     let l2 = line_from_points(point(0.0, 0.0, 0.0), point(0.0, 0.0, 1.0));
     assert!(close(line_line_dist(l1, l2), 5.0f64.sqrt(), 1e-9));
@@ -76,8 +70,9 @@ fn join_constructions() {
     // line through two points: passes them and its direction is their offset
     let l = line_from_points(point(0.0, 0.0, 0.0), point(1.0, 0.0, 0.0));
     let d = l.ideal_direction();
-    assert!(d[0].abs() > 0.9); // direction along x (scale-normalised below)
-                               // collinear points join to the same line
+    // direction along x (scale-normalised below)
+    assert!(d[0].abs() > 0.9);
+    // collinear points join to the same line
     assert!(close(
         point_line_dist(
             point(1.0, 2.0, 0.0),

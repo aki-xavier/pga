@@ -8,7 +8,7 @@ license = "MIT"
 [dependencies]
 
 [lints.clippy]
-# The one default lint this crate does not follow: the numeric kernels index parallel arrays by a
-# MODEL count — `n`, `components` — not by a slice's length, so the index is the maths the loop is
-# written in and an iterator would take the bound from the slice instead.
+# The one default lint this crate does not follow: the numeric kernels index parallel arrays by the
+# blade mask, not by a slice's length, so the index is the maths the loop is written in and an
+# iterator would take the bound from the slice instead.
 needless_range_loop = "allow"
