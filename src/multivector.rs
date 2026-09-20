@@ -626,6 +626,12 @@ pub fn motor_identity() -> Multivector {
     mv_scalar(1.0)
 }
 
+/// The identity of the ROTATION group, which is the motor identity's own even part: named separately
+/// because a caller holding a rotor states a rotation, and one holding a motor states a placement.
+pub fn rotor_identity() -> Multivector {
+    mv_scalar(1.0)
+}
+
 /// Screw-space slerp: m1 . exp(t . log(m1~ . m2)).
 pub fn interpolate(m1: Multivector, m2: Multivector, t: f64) -> Multivector {
     let rel = m1.reverse().gp(m2);

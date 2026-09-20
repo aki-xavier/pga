@@ -7,6 +7,12 @@ license = "MIT"
 
 [dependencies]
 
+# A DEV-dependency only: the comment rules, which this project's own test holds it to
+# (tests/comment_why.rs). It reads text, has no dependencies of its own, and nothing in `src/` names it,
+# so this crate stays the zero-dependency algebra the rest of the stack leans on.
+[dev-dependencies]
+comment-why = { path = "../comment-why" }
+
 [lints.clippy]
 # The one default lint this crate does not follow: the numeric kernels index parallel arrays by the
 # blade mask, not by a slice's length, so the index is the maths the loop is written in and an
